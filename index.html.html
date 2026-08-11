@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Full Chat Log</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #0b141a;
+            color: #e9edef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 650px;
+            height: 95vh;
+            background-color: #0b141a;
+            background-image: radial-gradient(circle, #182229 1px, transparent 1px);
+            background-size: 20px 20px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            border: 1px solid #222d34;
+        }
+
+        .chat-header {
+            background-color: #202c33;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #222d34;
+            z-index: 10;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #6b7c85;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: #e9edef;
+        }
+
+        .user-status {
+            font-size: 12px;
+            color: #8696a0;
+        }
+
+        .messages-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .date-divider {
+            align-self: center;
+            background-color: #182229;
+            color: #8696a0;
+            font-size: 11px;
+            padding: 5px 12px;
+            border-radius: 8px;
+            margin: 14px 0 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+
+        .msg-row {
+            display: flex;
+            flex-direction: column;
+            max-width: 78%;
+            margin-bottom: 2px;
+        }
+
+        .msg-row.left {
+            align-self: flex-start;
+        }
+
+        .msg-row.right {
+            align-self: flex-end;
+        }
+
+        .bubble {
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 14.2px;
+            line-height: 19px;
+            position: relative;
+            word-wrap: break-word;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+        }
+
+        .left .bubble {
+            background-color: #202c33;
+            color: #e9edef;
+            border-top-left-radius: 0;
+        }
+
+        .right .bubble {
+            background-color: #005c4b;
+            color: #e9edef;
+            border-top-right-radius: 0;
+        }
+
+        .time-stamp {
+            font-size: 10px;
+            color: #8696a0;
+            float: right;
+            margin-left: 12px;
+            margin-top: 4px;
+            user-select: none;
+        }
+
+        .right .time-stamp {
+            color: #aebac1;
+        }
+
+        .media-tag {
+            font-style: italic;
+            color: #8696a0;
+            font-size: 13px;
+        }
+
+        .system-msg {
+            align-self: center;
+            background-color: #182229;
+            color: #ffd279;
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+            text-align: center;
+            max-width: 90%;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* Custom Scrollbar */
+        .messages-area::-webkit-scrollbar {
+            width: 6px;
+        }
+        .messages-area::-webkit-scrollbar-thumb {
+            background: #374248;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="chat-header">
+        <div class="avatar">SD</div>
+        <div class="user-info">
+            <span class="user-name">Sumon Da</span>
+            <span class="user-status">online</span>
+        </div>
+    </div>
+
+    <div class="messages-area" id="chatBody">
+        
+        <div class="date-divider">July 2, 2026</div>
+        <div class="system-msg">Messages and calls are end-to-end encrypted. Only people in this chat can read, listen to, or share them.</div>
+
+        <div class="msg-row left"><div class="bubble">Ami Sumon bolchi<span class="time-stamp">3:31 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Sangita ki tomader sathe?<span class="time-stamp">3:32 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tomar sathe sangita jokhn kotha bollo call e tokhn o bari te nko office?<span class="time-stamp">9:13 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Bari jache<span class="time-stamp">9:41 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Auto ta uthe call korachlo<span class="time-stamp">9:41 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ok tao time?<span class="time-stamp">10:09 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">7:30 hbe<span class="time-stamp">10:22 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Tumi or shte kotha bolo<span class="time-stamp">10:22 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ami okay jishea korlam na kotha bolcho bolche naa o on ache amk sms kore ni<span class="time-stamp">10:23 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Tumi okay sms koro<span class="time-stamp">10:23 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Amk o reply korche na<span class="time-stamp">10:24 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ami to bolam kotha bolte onk bar bolam<span class="time-stamp">10:45 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ok<span class="time-stamp">10:45 PM</span></div></div>
+
+        <div class="date-divider">July 19, 2026</div>
+
+        <div class="msg-row left"><div class="bubble"><span class="media-tag">📷 13 Photos / Media Omitted</span><span class="time-stamp">9:26 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmk proman dilam<span class="time-stamp">9:26 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Amr upor babohar ta<span class="time-stamp">9:26 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ami to ok boli ni taka dibo na Amr ai mas ta problem cholche kolkata te room nilam eta ota.<span class="time-stamp">9:27 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Onk khorcha hoye geche<span class="time-stamp">9:27 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ok boleochi j next month e dicci even or 30k er jonno loan o nilam<span class="time-stamp">9:27 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ki boli bolo to<span class="time-stamp">9:32 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Tomdar modhe<span class="time-stamp">9:33 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble"><span class="media-tag">📷 4 Photos Omitted</span><span class="time-stamp">9:33 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ami amr bondhu er jonno akta meye k request send korechi even meye ta amk r amr bondhu k chine, r bondhu tak oi meye ta like o korto To bondhu ta boleche dakh single kina tahole dekhbo<span class="time-stamp">9:34 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Etar jonnou ami nki baj<span class="time-stamp">9:35 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Or kache fb insta sob ache<span class="time-stamp">9:35 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tao jodi<span class="time-stamp">9:35 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ami to manus<span class="time-stamp">9:35 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ager din ami office er manager r head of hr er sathe khete gechilam sobai chele Seta niye o Or problem<span class="time-stamp">9:36 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ami thik kore niyechi ami bangalore e kono vul kori ni, sangitar moto karo sathe na relation e gechi na kauk touch porjonto korechi<span class="time-stamp">9:37 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">So onk compromise korlam<span class="time-stamp">9:37 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">R noi<span class="time-stamp">9:37 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmk ami bole rakhlam sob dekhea rakhalam<span class="time-stamp">9:37 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tumi to Or bandhubi amr to nou, to tumi nije dekho<span class="time-stamp">9:38 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmi vabo dakho Eto din dhore amr Somporke Eto kichu boleche, dekho ami kmn ba ki.<span class="time-stamp">9:38 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Onk kichu boleche amr Somporke o sobai k<span class="time-stamp">9:38 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Amk tomader sobar samne villain baniyeche<span class="time-stamp">9:39 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tomrao dekho<span class="time-stamp">9:39 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Darao vlo kore bujhte dao amr sb guliea galo<span class="time-stamp">9:49 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sangitar ajke mon vlo nai<span class="time-stamp">9:49 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ajke amdar bari ta aschar kotha chlo<span class="time-stamp">9:50 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Mon valo nei tai bole ja khusi amk bolbe?<span class="time-stamp">9:50 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Jokhn e Mon vlo thakbe na<span class="time-stamp">9:50 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tokhn e amk eto baj vabe bolte hobe?<span class="time-stamp">9:50 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa sata to naa<span class="time-stamp">9:51 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tumi bolo Mon to amr o valo nei<span class="time-stamp">9:51 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Akta din chuti thake tao bari te kaj cholche sob thik kore dea elam<span class="time-stamp">9:51 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Aro kichu problem hoyeche<span class="time-stamp">9:51 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tai bole ami kauk baj vabe bolbo?<span class="time-stamp">9:52 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Amr jokhn e Mon kharap hobe ami samner jon k tokhn e baj vbe bolle relationship tikbe?<span class="time-stamp">9:52 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmr bari te jete Or dada permission dei ni etar jonnoi Mon kharap to?<span class="time-stamp">9:54 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ekhne amr ki dos?<span class="time-stamp">9:54 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Jani naa bolchlo to mon kharap<span class="time-stamp">10:00 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">To Mon kharap er karon ta to bolbe<span class="time-stamp">10:00 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tahole solution dibo?<span class="time-stamp">10:00 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Jani naa go o bolchlo ja or mon kharap<span class="time-stamp">10:01 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Eto ultopalta bolle hoiM<span class="time-stamp">10:01 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmi bolo<span class="time-stamp">10:01 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmr ki mone hoi<span class="time-stamp">10:01 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">O jeta bolche amk<span class="time-stamp">10:01 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Seta thik bolche ?<span class="time-stamp">10:01 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Thik bolche ki vul bolche?seta bolo<span class="time-stamp">10:01 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">🥲🥲<span class="time-stamp">10:01 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Bolo nij bolo<span class="time-stamp">10:02 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Eta only aj noi onk din dhore e hoye asche<span class="time-stamp">10:02 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Kinshuk er case ami accept korechi tarpor o<span class="time-stamp">10:02 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Haa sata niye to amio ok boli jaa<span class="time-stamp">10:03 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Tumi ata thik koro ni<span class="time-stamp">10:03 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Akhn jeta korche seta ki thik?<span class="time-stamp">10:04 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ami sob easily accept korchi bole o bujhte parche na<span class="time-stamp">10:04 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">R noi onk holo<span class="time-stamp">10:04 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Onk compromise korlam<span class="time-stamp">10:05 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">R parchi na<span class="time-stamp">10:05 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Or esb bolar mukh ki kore thak bujhe pai na nij Eto boro vul korar por o<span class="time-stamp">10:05 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Tomdar modhe faltu faltu kano jaa ato jhamala laghea k jane<span class="time-stamp">10:08 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ami ki jhamela korchi?<span class="time-stamp">10:13 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmr sms dekhe mone hocce?<span class="time-stamp">10:13 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sata na 2 jon ar kotha e bolche<span class="time-stamp">10:17 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ami chai sob santo hok<span class="time-stamp">10:18 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">But kothy kothy jhamela korbe<span class="time-stamp">10:18 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sata ami okay bolche dekho tomra 2 jon e ato jhamala koro<span class="time-stamp">10:50 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Tumi ja amk sms korchlo sangita k bolacho Amk o jisha korchlo<span class="time-stamp">10:51 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ami kori na<span class="time-stamp">11:10 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Bolo na kore ni<span class="time-stamp">11:10 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Thik ache<span class="time-stamp">11:10 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Akhono jhamela korche ?<span class="time-stamp">11:11 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ha<span class="time-stamp">11:11 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ami kotha bolchi na<span class="time-stamp">11:11 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Rag komuk<span class="time-stamp">11:11 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Amro rag hocce Or o<span class="time-stamp">11:11 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Akhn kotha bolle besi jhamela hobe<span class="time-stamp">11:12 PM</span></div></div>
+
+        <div class="date-divider">July 20, 2026</div>
+
+        <div class="msg-row right"><div class="bubble">Haa sata thik<span class="time-stamp">12:58 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hm<span class="time-stamp">10:54 AM</span></div></div>
+
+        <div class="date-divider">July 25, 2026</div>
+
+        <div class="msg-row left"><div class="bubble">Tmk ami boli ni sangita k bojhate j ok bojhao ektu?<span class="time-stamp">12:41 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Bolechilam?<span class="time-stamp">12:42 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Haa<span class="time-stamp">12:45 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Amk to sangita jisha korchlo phone kore tomr shte dekha korea smy<span class="time-stamp">12:45 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ami vablam ja tumi bole diyecho tai amio bole dilam<span class="time-stamp">12:46 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ki boli bolo to dada tomdar modhe jata niye jhamela cholche taka dea niye ota niye to amio kichu bolte pari naa Kinshuk k niye jata hyeche sata to ami ok boli<span class="time-stamp">12:47 AM</span></div></div>
+
+        <div class="date-divider">August 5, 2026</div>
+
+        <div class="msg-row right"><div class="bubble">Dada ankan bolchlo ghurte jabe to or shte kotha bolbe nio na tomdar kbe time hbe<br><br><b>+91 90385 31331</b><span class="time-stamp">11:33 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Acca<span class="time-stamp">11:53 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">But 15trkh ami family niye jacci<span class="time-stamp">11:53 PM</span></div></div>
+
+        <div class="date-divider">August 6, 2026</div>
+
+        <div class="msg-row right"><div class="bubble">Accha thik ache tomdar kon din hbe<span class="time-stamp">12:07 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Drkr sata dekha jabe<span class="time-stamp">12:07 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Next month e dekhbo?<span class="time-stamp">12:07 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Haa tumi ankan k bolo<span class="time-stamp">12:08 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Darao<span class="time-stamp">12:08 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Okay<span class="time-stamp">12:08 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Sms korechi<span class="time-stamp">12:08 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Thik ache ami bolche<span class="time-stamp">12:08 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm<span class="time-stamp">12:10 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble"><a href="https://youtu.be/CakELAll2f8?si=0tmrOVhpZSXiPpPt" target="_blank" style="color: #53bdeb;">https://youtu.be/CakELAll2f8</a><span class="time-stamp">10:23 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Darao dekhche<span class="time-stamp">10:26 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm<span class="time-stamp">10:27 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble"><span class="media-tag">📷 Media omitted</span><span class="time-stamp">10:31 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Konta valo dekhe alochona kore janao 2jon<span class="time-stamp">11:33 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ha bari giye dekhache<span class="time-stamp">12:29 PM</span></div></div>
+
+        <div class="date-divider">August 7, 2026</div>
+
+        <div class="msg-row left"><div class="bubble">Tmr telegram ache?<span class="time-stamp">12:12 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa go<span class="time-stamp">12:12 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Kano ki hoyache<span class="time-stamp">12:12 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Akta jinis check kortam<span class="time-stamp">12:13 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Aga chlo akhon nai<span class="time-stamp">12:13 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Acca then charo<span class="time-stamp">12:13 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Bolte jeo na ok abar eta<span class="time-stamp">12:16 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Please<span class="time-stamp">12:16 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa na bolbo na<span class="time-stamp">12:18 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Or r akta wp number ache na?<span class="time-stamp">12:19 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Amr kache to 1 tai number<span class="time-stamp">12:20 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ok dekhchi<span class="time-stamp">12:20 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Sangita er sathe tomar aj kotha hoyeche?<span class="time-stamp">11:59 PM</span></div></div>
+
+        <div class="date-divider">August 8, 2026</div>
+
+        <div class="msg-row right"><div class="bubble">Haa onk khon ache<span class="time-stamp">12:00 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">O kono problem e ache kichu bollo?<span class="time-stamp">12:00 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Akhon to sms korlam reply korche naa<span class="time-stamp">12:00 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa to<span class="time-stamp">12:01 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Kno ki hoyache<span class="time-stamp">12:01 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Mon kharap ba kichu?<span class="time-stamp">12:01 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa<span class="time-stamp">12:01 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Bola ni to<span class="time-stamp">12:01 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ok<span class="time-stamp">12:02 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ager din tumi bolechile j tomar sathe kotha hoyeche?<span class="time-stamp">12:03 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Kobe ?<span class="time-stamp">12:03 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Sei jdin tmk call kore ask korlo j amr sathe kotha hoi kina<span class="time-stamp">12:04 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Haa<span class="time-stamp">12:04 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Acca bolte mana korechilam bcs O okhne oi mal tak niye kotha bolechilm<span class="time-stamp">12:05 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ara ami to bolchlam ja tomar shte kotha hye ni ... Kintu o abr pore din amk call korche bolche tai ami vablam jaa tumi bola diyacho ba o jana gache tai ami haa bolche<span class="time-stamp">12:08 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Bolo na kotha hoi oi mttr e<span class="time-stamp">12:08 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Karon jokhon o amk call korchlo tar ektu agai amr shte kotha hoyachlo ami jatam ja tumi sata acho tai vablam ja tumi bola diyacho ja amr shte kotha hoyache tomar<span class="time-stamp">12:09 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Bcs ami half sms rakhi na so sondeho korbe faltu<span class="time-stamp">12:10 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ami bolbo na kono mttr niye but ami sms rakhi na to sms dekhte chaile faltu sondeho korbe r ankan o kharap vabbe<span class="time-stamp">12:12 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Accha thik ache<span class="time-stamp">12:14 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Karon ankan kharap vble problem hobe faltu<span class="time-stamp">12:14 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Na na o kichu vbe na<span class="time-stamp">12:15 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">O jane to j ai sob niye kotha hoi?<span class="time-stamp">12:15 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa sb ta jne naa but kotha hye tomdar problem niye ota jane<span class="time-stamp">12:16 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Acca Thik ache<span class="time-stamp">12:16 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmra aksathe 1st time ghurte jacco to nki?<span class="time-stamp">12:21 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Haa<span class="time-stamp">12:23 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Vlo😁<span class="time-stamp">12:23 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">😁😁<span class="time-stamp">12:34 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Bujhechi🤭<span class="time-stamp">12:34 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Sorry dont mind<span class="time-stamp">12:36 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ara naa naa dhur kichu mone kori ni<span class="time-stamp">12:37 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ok<span class="time-stamp">12:37 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tahole vlo<span class="time-stamp">12:38 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble"><span class="media-tag">📷 Media omitted</span><span class="time-stamp">1:00 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Dekho abar esb na dekhe<span class="time-stamp">1:01 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa naa...<span class="time-stamp">1:01 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ankan?<span class="time-stamp">1:01 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ohh o kichu bolbe naa<span class="time-stamp">1:02 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Na janle kharap vabte pare. Faltu jhamela<span class="time-stamp">1:02 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ara naa naa o ai sb niya mind korbe naa<span class="time-stamp">1:02 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hoito rege sangita k bole dilo bas<span class="time-stamp">1:03 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ara na go o bolbe na o sb niye jhamala kore naa<span class="time-stamp">1:04 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">R hoito adda marte marte excess adda mere boslam tokhn hobe problem<span class="time-stamp">1:04 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Kinshuk ar bapar ta niye hye jhamala na hole ono kichu niye jhamela kore naa<span class="time-stamp">1:05 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">O go o sob bolbe na<span class="time-stamp">1:05 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Acca Thik ache kinsuk er r bolo na, ami jani kichu akta hoyeche noile amr sathe kiss korte Or problem hoi, mne o guilty feel kore<span class="time-stamp">1:07 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Bujhte pari ami kichu to ache jeta hide hocce<span class="time-stamp">1:07 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa na tumi jata vabcho amon ta naa<span class="time-stamp">1:09 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Sure?<span class="time-stamp">1:10 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Haa sure amon kichu hole thik e ami bujhte partam<span class="time-stamp">1:11 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">O j vbe kaddte kaddte call kore bollo ami kinsuk k charbo na or kache khoma chal<span class="time-stamp">1:12 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Etar por O bolcho?<span class="time-stamp">1:12 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ata niye ami ok bolchlam jaa tumi ata thik koro ni amr o oi bapar ta kharap lagchilo tobe tokhon ami jatam naa jaa tmk diye komma chabe che kintu office ar modha jate parche sata o amr vlo laghea ni<span class="time-stamp">1:15 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmk bolchi tumi please kauk bolo na eta ankan k O bolo na.<span class="time-stamp">1:16 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">To tokhon o bolche jaa Kinshuk k dekhao ni ja o ki suru korachlo ami chai ni jaa amr jone o nijar kono khati koruk tai ami amon ta korache<span class="time-stamp">1:16 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Na na<span class="time-stamp">1:16 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Okay ai sb boli ni<span class="time-stamp">1:16 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Kinsuk er kotha vablo o r ami tokhn purulia theke bike e aschilam seta vablo na?<span class="time-stamp">1:17 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Dakho mttr ta tmk bola thik hobe kina jani na but<span class="time-stamp">1:18 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Kichu amr ata mone hye naa tumi jata vabcho amon kono bapar ache ki naa hole amio bujhte partam<span class="time-stamp">1:43 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Karon sangita hye to age pore sb e bole dito<span class="time-stamp">1:43 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Na go, tmk r ki bolbo bolo, akta kotha bolbo but promise korte hobe keu jno na jane ankan o noi<span class="time-stamp">1:45 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa bolo<span class="time-stamp">1:45 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Sangita khub vlo kore jane j ami physical intimacy chara amr problem hoi ta chara o o ase na kache.<span class="time-stamp">1:46 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sangita k ata jigea korchlo ja kno kore ata<span class="time-stamp">1:48 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ha korechi bole icce kore na amr<span class="time-stamp">1:49 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Kno ichee kore naa sata bole ni<span class="time-stamp">1:50 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Na ask korle otai bole, tmr ki mone hoi kno icce kore na?<span class="time-stamp">1:50 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Jani naa amk to amon kichu bole ni<span class="time-stamp">1:51 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Amr j ki obostha akhn seta ami e jani.<br><br>Please esb kauk bolo na, sorry mind koro na.<span class="time-stamp">1:51 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa thik ache<span class="time-stamp">1:51 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ami nij nijk control e rakhte parchi na.<br><br>Ki kore ok bojhabo setao bujhte parchi na<span class="time-stamp">1:52 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ata to tmk e bujhte hbe<span class="time-stamp">1:57 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sangita k<span class="time-stamp">1:57 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Bujhacci but chaiche na bujhte<span class="time-stamp">1:58 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">O hye to ektu sb kichu niye ghata ache tai hye to amon korche<span class="time-stamp">1:59 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Sorry charo ebar bolte bolte control harea aro kichu bole dibo, charo.sorry esb kotha bolchi ankan kharap vabbe<span class="time-stamp">1:59 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Haa bad dao sangita k time dio thik hye jabe sb<span class="time-stamp">2:00 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">O ghete Or theke besi to amr houar kotha, abar ai office e akta chele ese juteche, amr sojjo hocce na otak o<span class="time-stamp">2:00 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">🤣🤣🤣<span class="time-stamp">2:01 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ok time dicci, sob try korchi tobuo same<span class="time-stamp">2:01 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmi bujhte parcho na amr bpr ta, amio jodi kono meyer sathe kotha bolte partam, sob share korte partam.<span class="time-stamp">2:02 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ara ato bochor jokhon ache tokhon thik e thakbe<span class="time-stamp">2:04 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Office a gale to amon kom besi hbe<span class="time-stamp">2:04 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tokhn o bujhto, karon ai new cheletat importance O amr theke besi hocce. Eto din biswas koro kono meyer sathe kichu kori ni, but asojjo lgche ebar.<span class="time-stamp">2:04 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">A maa na na o koche bolai tmk o sei same kj ta korte hbe amon to kono mne nai<span class="time-stamp">2:05 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Koi amr to office e emon hoi na kono meyer sathe kichu erom vbe, tmi vbo biswajit Or hat e ghori eke dicce, eta normal?<span class="time-stamp">2:05 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ara bujho na tmk ragano jone korche<span class="time-stamp">2:05 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ar besi kichu naa hye to<span class="time-stamp">2:05 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Raganor jonno na ami dekhechi oi chele tar importance<span class="time-stamp">2:06 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ara tumi besi vabcho amon kichu hole amk bolto amk to bole ni<span class="time-stamp">2:08 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ai sb kichu<span class="time-stamp">2:08 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmk to kinsuk k niyeo onk kichu bole ni, sob bolbe na<span class="time-stamp">2:08 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmk niye o sondeho korlo sedin, nij esb korbe r amk sondeho korbe<span class="time-stamp">2:09 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sata bapar ta alada Kinshuk ar bapar ta amk diye suru hoyche ar tokhon roshmi di o ok support korto<span class="time-stamp">2:12 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Amaro kauk chai jar sathe vlo vbe mon khule kotha bolte parbo antoto, j antoto kauk kichu bolbe na.<span class="time-stamp">2:12 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sata to korche o vabche ja tumi amk sb bole diyacho<span class="time-stamp">2:12 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm r oi roshnir jonnoi sangita orom hoyechilo.<span class="time-stamp">2:13 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmk bolbo ki tumi ki kichu jano na?<span class="time-stamp">2:14 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Mne<span class="time-stamp">2:14 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Jani ami<span class="time-stamp">2:14 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Age bujhte pari ni but pore sb e bujche<span class="time-stamp">2:14 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tumi to sob e jano to tmk new kore ki bolbo<span class="time-stamp">2:15 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Eta seriously bollm vlo lgche na r<span class="time-stamp">2:15 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ki bujhche<span class="time-stamp">2:16 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Oi roshni di ki ki korche<span class="time-stamp">2:16 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm setai<span class="time-stamp">2:16 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Haa satai...<span class="time-stamp">2:17 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm<span class="time-stamp">2:17 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sangita k bujhao thik e bujhbe akhon baire jache ato lok ar shte kotha bolche to sobar ta sune amon korche<span class="time-stamp">2:18 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Amio baire amk o onke onk kichu bole koi ami to korchi na<span class="time-stamp">2:18 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ankan ghumiye geche?<span class="time-stamp">2:19 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Haa 🤣 amr kl office nai ai ami akhono ghumai ni Pinterest dekhche<span class="time-stamp">2:20 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">O to choto ektu bujhte time laghbe<span class="time-stamp">2:20 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Etotao choto noi o<br><br>But ebar ami karo sathe kotha bolbo o jemon bole<span class="time-stamp">2:21 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sata niye abr jhamela hbe<span class="time-stamp">2:22 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Janbe na<span class="time-stamp">2:22 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">🙃🙃<span class="time-stamp">2:22 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ki? Kno bolbo na?<span class="time-stamp">2:23 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sangita tmk vlobasa ami bujhache or onk kotha ta to tumi jata vabcho sata puro ta thik naa.. ja o tmk vlobasa na<span class="time-stamp">2:24 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Vlo base to onno chele k o importance dai, to ami kno na?<span class="time-stamp">2:25 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Importance naa ota hye to tmk ragano jone kore<span class="time-stamp">2:26 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Raganor jonno noi ager din sobar samne oi chele tar sathe kotha bolchilo ami ki akta bolte gelam amk insult koro sobar samne<span class="time-stamp">2:27 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ami karo sathe to kotha bolbo ebar but kar sathe jni na<span class="time-stamp">2:30 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">😢<span class="time-stamp">2:30 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmr sathe eto kotha hocce bolo na sangita k parle ankan ko, jawar age jhamela hobe<span class="time-stamp">2:38 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa naa bolbo naa<span class="time-stamp">12:49 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ok thank you, tmr sathe bola thik hocce kina jani na<span class="time-stamp">1:06 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Onk deep bole diyechi<span class="time-stamp">1:06 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ami kintu sms dlt kore deachi<span class="time-stamp">1:11 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Thik ache amio delete kore dabo<span class="time-stamp">1:52 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Thank you<span class="time-stamp">1:53 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Call korchi ektu por<span class="time-stamp">1:53 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Okay<span class="time-stamp">2:00 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hm<span class="time-stamp">2:03 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tomra kal amr ekhne eso tumi ankan sangita sobai<span class="time-stamp">4:20 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ankan k group e bolte bolo<span class="time-stamp">4:20 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Accha ami bolche Ankan k dakhe ki bole<span class="time-stamp">5:51 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Or hbe nki<span class="time-stamp">5:51 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Kar?<span class="time-stamp">6:15 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ankan ar o kl faka ache nki jana bolche<span class="time-stamp">6:28 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ok bolo jene<span class="time-stamp">6:40 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Sangita ache sms koro na<span class="time-stamp">8:21 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hi<span class="time-stamp">10:06 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Kl kotai jabo<span class="time-stamp">10:08 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ami ar ankan<span class="time-stamp">10:08 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">?<span class="time-stamp">10:08 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sangita asbe to tahola jabo<span class="time-stamp">10:08 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">O to amk call korlo na<span class="time-stamp">10:08 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Bolo call korbe<span class="time-stamp">10:08 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">darao ask korchi<span class="time-stamp">10:09 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Kokhn asbe ankan r tumi alochona kore janao<span class="time-stamp">10:24 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sangita kokhon jabe ?<span class="time-stamp">10:27 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Kothy?<span class="time-stamp">10:27 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ara sangita asbe to kl<span class="time-stamp">10:28 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ami ar Ankan jokhon jabo<span class="time-stamp">10:28 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">O kokhon asbe<span class="time-stamp">10:28 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ha asbe<span class="time-stamp">10:28 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">O thakbe amar sathe e tokhn<span class="time-stamp">10:28 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Accha tahola bikal bala jai<span class="time-stamp">10:28 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ankan er sathe kotha bole bolo sokal e nki nikal e<span class="time-stamp">10:28 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Bikal jala jabo sokhla ankan ar ki 1 ta kj ache bikal ar dik a jabo<span class="time-stamp">10:29 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Time bole dao<span class="time-stamp">10:29 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">5 ta smy<span class="time-stamp">10:29 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ok done<span class="time-stamp">10:29 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmk call kora hoi ni actually aj shooting chilo office er Independence Day er jonno<span class="time-stamp">10:31 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">ohh ache sangita amk call korbe bolachlo kintu korlo naa<span class="time-stamp">10:33 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Are o office er sobar sathe chilo khete gechilo amr sathe o baguihati te e dekha holo<span class="time-stamp">10:34 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Oi jonno call kore ni hoi to chap nio na amr kache sms nei, j o dekhbe.<span class="time-stamp">10:35 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">🤣🤣<span class="time-stamp">10:35 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Accha<span class="time-stamp">10:36 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hascho kno?<span class="time-stamp">10:36 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmi ki niye tension korchile seta ami bujhe gechi bole?<span class="time-stamp">10:36 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">? Bolo hasle kno?<span class="time-stamp">10:45 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">🙃<span class="time-stamp">10:45 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ara naa naa emni<span class="time-stamp">10:46 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa go sata na amk bolchlo call korte trpr o bolo jaa nije krba tai vablam korlo naa kno<span class="time-stamp">10:46 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Acca acca<span class="time-stamp">10:46 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmi eta bolo na ba bujhio na j tumi amk bolecho j kal 5tar somoi asbe, ankan k dea amk bolao<span class="time-stamp">10:47 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">J kal 5tai asbe<span class="time-stamp">10:47 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Haa<span class="time-stamp">10:48 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmm tahole sondeho jabe na<span class="time-stamp">10:48 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Mne 🙂<span class="time-stamp">10:49 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Mne tmi amk bolle j 5tai asbe ami sangita k eta bolbo sangita ask korbe k bollo ami bolbo ankan, karon ankan er sms to ami dlt kori na, tmr sms dlt kori, to jodi dekhe sondeho ta korbe na<span class="time-stamp">10:50 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Jodi tmr sms na thak r ankn er sms e 5tar somoi asar ullekh na thak to sondeho to jabe e , j amdr kotha hoi<span class="time-stamp">10:51 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ohh ache ami to ankan k bola jaa 5 tai jabo o to tmk bolache mone hye<span class="time-stamp">10:52 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm kotha hoyeche<span class="time-stamp">10:53 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ankan jane amr tmr kotha hocce?<span class="time-stamp">10:53 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa<span class="time-stamp">11:02 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ok<span class="time-stamp">11:02 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble"><i>This message was deleted</i><span class="time-stamp">11:03 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Dnnr hoye geche?<span class="time-stamp">11:16 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Akta kotha bolbo? Mind na korle<span class="time-stamp">11:17 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa bolo<span class="time-stamp">11:17 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Dp ta vlo lgche🙂<span class="time-stamp">11:17 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">😁😁 thank you<span class="time-stamp">11:22 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Red pore besi vlo lgche<span class="time-stamp">11:23 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">😅😅<span class="time-stamp">11:41 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ki holo<span class="time-stamp">11:41 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Kal etai pore aso then<span class="time-stamp">11:42 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ata pore biye bari jai<span class="time-stamp">11:46 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Oh acca but vlo lgche r ache eta pore photo?<span class="time-stamp">11:47 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa 1 bar e porachlam<span class="time-stamp">11:47 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Acca acca but eta vlo lgche<span class="time-stamp">11:48 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Haa<span class="time-stamp">11:48 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Sorry please dont mind<span class="time-stamp">11:49 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ara naa naa<span class="time-stamp">11:49 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Mona kore ki ache<span class="time-stamp">11:49 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Besi open hoye jacci mone hocce<span class="time-stamp">11:50 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Charo bad dao ai sb<span class="time-stamp">11:51 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Sure?<span class="time-stamp">11:51 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Haa<span class="time-stamp">11:51 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ai chai naa sangita amk kharap vabuk<span class="time-stamp">11:52 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm jante parle kharap vabbe<span class="time-stamp">11:52 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Haa<span class="time-stamp">11:52 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">But tmi bolbe?<span class="time-stamp">11:53 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ki bolbo ami<span class="time-stamp">11:53 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Mne Sangita k janabe egulo?<span class="time-stamp">11:53 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa bolbo naa<span class="time-stamp">11:54 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Karon na janale janbe ki kore?<span class="time-stamp">11:54 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sata naa tao 🙂<span class="time-stamp">11:54 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ami or bondhu or kharap chai naa<span class="time-stamp">11:54 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Kharap hobe na.<span class="time-stamp">11:55 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Na tao<span class="time-stamp">11:55 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Amra na janale kichue kharap hobe na<span class="time-stamp">11:56 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sata naa tao o to amr bondhu o kosto pabe jata jante parle samon kichu korbo naa<span class="time-stamp">11:57 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Acca amr kotha holo jante parbe jodi amader modhe keu bole<span class="time-stamp">11:57 PM</span></div></div>
+
+        <div class="date-divider">August 9, 2026</div>
+
+        <div class="msg-row right"><div class="bubble">Naa ami bolbo naa<span class="time-stamp">12:01 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tahole we can go ahead<span class="time-stamp">12:01 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa<span class="time-stamp">12:06 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sangita jokhon amon korchlo kono chele shte besi close vbe kothe bolchlo tokhon to tmk o kharap lagchilo<span class="time-stamp">12:07 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Tbe tumi kno amon kichu kobe<span class="time-stamp">12:07 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Akhono setai korche, biswajit<span class="time-stamp">12:07 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ami bujhe bolbo<span class="time-stamp">12:08 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sangita k<span class="time-stamp">12:08 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Whatever or ta ami jante perechi amr eta tmi na bolle jante parbe na<span class="time-stamp">12:08 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Jate oi chele tar shte sei vbe kotha naa bole<span class="time-stamp">12:09 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmi kichu bolle o bujhe jabe amdr kotha hoi<span class="time-stamp">12:09 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa ami sei vbe e bolbo jate bujhte naa pare<span class="time-stamp">12:10 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">R emnio tmk dekhe sedin e kmn akta current legechilo<span class="time-stamp">12:10 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Mne<span class="time-stamp">12:10 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Mne htsm er baire j din ele<span class="time-stamp">12:11 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">😒😒<span class="time-stamp">12:11 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Onno rokom akta current laglo<span class="time-stamp">12:11 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ami jni tmr o vlo legechilo🤭<span class="time-stamp">12:12 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Amaa naa naa<span class="time-stamp">12:12 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Amon kichu naa<span class="time-stamp">12:12 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Amr chokh faki dibe?<span class="time-stamp">12:13 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ara naa ami 1 jon ar shte commited ami mone amon kichu asbe kno<span class="time-stamp">12:14 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Mon e noi mathai<span class="time-stamp">12:14 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa<span class="time-stamp">12:15 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Bt amr to dekhe hoyechilo kichu<span class="time-stamp">12:15 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sata ami jani naa kichu ami amon kichu vbi ni ami kano amr bondhur bf k niye vabbo<span class="time-stamp">12:16 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmm but amr hoyechilo<span class="time-stamp">12:16 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Please esb kauk bolo na, keu noi mne keu noi please<span class="time-stamp">12:17 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa bolbo naa ... Kichu ai sb vbo naa<span class="time-stamp">12:18 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Please<span class="time-stamp">12:18 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm Thik ache vabchi na<span class="time-stamp">12:18 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Kono vabe amdar 4 jon ar modhe kichu jhamala hok sata chai naa<span class="time-stamp">12:19 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Kono vabe e jhamela hobe na jodi amra alart thaki<span class="time-stamp">12:19 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa tao<span class="time-stamp">12:22 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Thik ache time nao bojho then dekha jabe<span class="time-stamp">12:22 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ami to ankan ar shte vlo achi amr kono problem nai ok niye<span class="time-stamp">12:25 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Tahola ami kno kichu vabte jabo<span class="time-stamp">12:25 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmn thik<span class="time-stamp">12:25 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Sorry<span class="time-stamp">12:25 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">🙂<span class="time-stamp">12:25 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Kl 5 tai jabo cc2 ta<span class="time-stamp">12:27 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ok<span class="time-stamp">12:27 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">I'll wait<span class="time-stamp">12:27 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Okay<span class="time-stamp">12:28 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm<span class="time-stamp">12:28 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmra prai e dekha koro?<span class="time-stamp">12:28 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmi r ankan?<span class="time-stamp">12:28 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Haa<span class="time-stamp">12:28 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Personal qsn korte pari?<span class="time-stamp">12:29 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Bolo<span class="time-stamp">12:29 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmra prai e intimate hou?<span class="time-stamp">12:29 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">3 yr relation to prai na holao ata ektu e natural<span class="time-stamp">12:30 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ha savabik. Intimate er time e sob theke bttr jinis ki mone hoi?<span class="time-stamp">12:32 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Mne<span class="time-stamp">12:33 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Mne kon jinis ta besi vlo lge?<span class="time-stamp">12:33 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">If you are uncomfortable then ok<span class="time-stamp">12:34 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Bad o ai sb<span class="time-stamp">12:35 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm thikache<span class="time-stamp">12:36 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ki korcho?<span class="time-stamp">12:36 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Kj koche office ar<span class="time-stamp">12:38 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Akhn office er kaj? Bap re<span class="time-stamp">12:38 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ki 1 ta office a giye porche ato kj ar chap<span class="time-stamp">12:39 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ki ar bolbo<span class="time-stamp">12:39 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Aka thako nki sathe keu thak?<span class="time-stamp">12:39 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Maa.<span class="time-stamp">12:39 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ami try korchi amr office e sob in house koranor jodi hoi bolbo, r graphics er project asbe amr kache freelance, to ami tmk dea dibo<span class="time-stamp">12:40 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Okay bolo<span class="time-stamp">12:42 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Tahola<span class="time-stamp">12:42 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ha karon ami start up korchi eta tmk bollam bolo na kauk, sangitak bolo na tmk bolechi, Amr company registration and gst sob complete<span class="time-stamp">12:43 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Bhaa vlo to<span class="time-stamp">12:44 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Project ele bolbo<span class="time-stamp">12:44 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sangita amk bolchlo jaa freelance suru korbo<span class="time-stamp">12:44 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Accha<span class="time-stamp">12:45 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm jni<span class="time-stamp">12:45 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ami project tulchi<span class="time-stamp">12:45 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ankan ki korche? Mne kon domain Or?<span class="time-stamp">12:45 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">UX Ui<span class="time-stamp">12:47 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Bah ele bolbo<span class="time-stamp">12:47 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Okay<span class="time-stamp">12:47 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm<br>Ma er problm hoi na tmi rate kaj korcho<span class="time-stamp">12:48 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Kal ki pore ascho?<span class="time-stamp">12:51 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa naa<span class="time-stamp">12:51 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Besi kj nai<span class="time-stamp">12:51 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Last min chenge<span class="time-stamp">12:51 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">🥲<span class="time-stamp">12:51 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ar ki<span class="time-stamp">12:51 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Acca acca<span class="time-stamp">12:51 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Oto vabchi nki<span class="time-stamp">12:52 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ami vbchilm<span class="time-stamp">12:52 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Akta jinis chaibo?<span class="time-stamp">12:53 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ki<span class="time-stamp">12:53 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmr 2to photo<span class="time-stamp">12:54 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">🙃🙃<span class="time-stamp">12:56 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Please you can understand just 2 photos<span class="time-stamp">12:56 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ara ki hbe<span class="time-stamp">12:57 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Emni r ki<span class="time-stamp">12:57 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Irritate hocco?<span class="time-stamp">12:57 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa sata naa<span class="time-stamp">12:59 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Then?<span class="time-stamp">12:59 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sangita jor hoyache<span class="time-stamp">12:59 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm bollo akhn jor eseche<span class="time-stamp">1:00 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">O to ghumai<span class="time-stamp">1:00 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sms korlam<span class="time-stamp">1:00 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Reply dicche na<span class="time-stamp">1:01 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm ghumacce<span class="time-stamp">1:01 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">O ghumacce<span class="time-stamp">1:01 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Dhur maya ta dorkar ar smy ghuma jai 🥲<span class="time-stamp">1:01 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Kno ki holo<span class="time-stamp">1:02 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa 1 ta kotha boltam ...vbo naa ai sb kichu naa tmk niye na kno 1 ta kotha 🤣<span class="time-stamp">1:02 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Same kichu hoe e na sudhu ghumiye e jai🥹<span class="time-stamp">1:02 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ki suni<span class="time-stamp">1:02 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sa ache 1 ta office ar kotha<span class="time-stamp">1:03 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">🥲🥲<span class="time-stamp">1:03 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">I believe you<span class="time-stamp">1:03 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Acca<span class="time-stamp">1:03 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Thik e bolecho drkr er time e ghumiye e jai o<span class="time-stamp">1:03 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">🥲🥲<span class="time-stamp">1:05 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Akhn jmn I need🥲<span class="time-stamp">1:05 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Phone kore ghuma diye tule dao<span class="time-stamp">1:09 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">🤣🤣<span class="time-stamp">1:09 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Na tulle rag kore<span class="time-stamp">1:10 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Seriously akhn drkr but o thak na erom time e<span class="time-stamp">1:10 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Help lage but help pai na<span class="time-stamp">1:10 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Tumio ghuma jao ar ki<span class="time-stamp">1:17 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ghum asbe na problem hocce<span class="time-stamp">1:18 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tumi ghumabe akhn?<span class="time-stamp">1:18 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Kj ta ses hoye gale<span class="time-stamp">1:22 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Dile na tumi🥲<span class="time-stamp">1:22 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Tumi FB ta diya dekha nao<span class="time-stamp">1:26 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">😁😁<span class="time-stamp">1:27 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmr photo?<span class="time-stamp">1:27 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Fb sangitar kache search korle bujhte parbe so<span class="time-stamp">1:28 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Please help me give me 2 photos<span class="time-stamp">1:28 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">🥹<span class="time-stamp">1:28 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">😒😒<span class="time-stamp">1:33 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">🤣🤣<span class="time-stamp">1:34 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hascho?<span class="time-stamp">1:35 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Please<span class="time-stamp">1:35 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Dao<span class="time-stamp">1:35 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble"><i>You deleted this message</i><span class="time-stamp">1:36 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ai nao<span class="time-stamp">1:36 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">😁<span class="time-stamp">1:36 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Only tomar dao<span class="time-stamp">1:36 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">🥲<span class="time-stamp">1:37 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmr lips ta🥵🤭<span class="time-stamp">1:37 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa charo bad o amr kj ache<span class="time-stamp">1:38 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Seriously tmr lips dekhe<span class="time-stamp">1:39 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Only tmr photo dao<span class="time-stamp">1:39 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Amr ai sb kotha vlo laghe naa<span class="time-stamp">1:42 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Sorry 🙂<span class="time-stamp">1:42 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Please mind koro na<span class="time-stamp">1:42 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ankan janle kharap vbe<span class="time-stamp">1:42 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ankan janbe ki kore? Jodi amra na janai<span class="time-stamp">1:43 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">R sorry amr ektu problm hocce to flow te hoye geche🙂 atkanor jonno thanks noile aro kichu flow te bole feltam<span class="time-stamp">1:44 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Hmm<span class="time-stamp">1:51 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Na tao<span class="time-stamp">1:51 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm bujhte perecho i think problm ta<span class="time-stamp">1:51 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Kiccu hobe na voi pacco tumi , tumi vbcho faltu jhamela hobe. Ok amra misi dekha jabe aste aste<span class="time-stamp">1:52 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ami just chai tomar sathe amr sob mental and physical feelings Or kotha share korbo, tmk kichu share korar drkr nei. Jodi icce hoi tobe e koro.<br><br>That's it<span class="time-stamp">1:53 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa kano amr shte korbe<span class="time-stamp">2:04 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ata thik naa<span class="time-stamp">2:04 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Karon biswas ta ache r tmk amr ae lage<span class="time-stamp">2:05 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Mne<span class="time-stamp">2:05 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Mne cute and _____<span class="time-stamp">2:06 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Main kotha biswas ta ache j ami tmi chara kotha gulo e keu janbe na<span class="time-stamp">2:07 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Kaw naa januk ami mon thke chai naa sangita ba Ankan k kosto dite<span class="time-stamp">2:10 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmm bujhlm.<span class="time-stamp">2:11 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">But keu kichu janbe trpr se kosto pabe<span class="time-stamp">2:12 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Photo 2to dao please etuku help koro 🥲<span class="time-stamp">2:17 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Amon kono kj kore to drkr nai jata janle kaw kosto pata tare<span class="time-stamp">2:17 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm photo 2to dao please 🥲<span class="time-stamp">2:18 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm bujhlm<span class="time-stamp">2:19 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ok just 2to photo dao na🥹<span class="time-stamp">2:19 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">ata ki hbe<span class="time-stamp">2:20 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ektu lagbe<span class="time-stamp">2:20 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Please etuku help koro🥲<span class="time-stamp">2:20 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa ai sb bapar a ami tmk help korte pari naa<span class="time-stamp">2:21 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Please ektu help koro 🥲<span class="time-stamp">2:21 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Tomr kache to sangita chobi ache<span class="time-stamp">2:22 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Tahola<span class="time-stamp">2:22 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Kno<span class="time-stamp">2:22 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hobe na dekhe, kron ache r seta tumi jano, please🥲<span class="time-stamp">2:23 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ota kono karon hote pare naa<span class="time-stamp">2:23 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">R emni ja insult hoi seta vebe aro hoi na.<span class="time-stamp">2:24 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tumi please etuku help koro🥲<span class="time-stamp">2:24 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Tao sa tomr gf<span class="time-stamp">2:24 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm jni but Or photo dekhle e akbar kinshuk akbar Biswajit er kotha mone pore jabe<span class="time-stamp">2:25 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Kinshuk to akhon nai ok block kore diyache<span class="time-stamp">2:29 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">But mone pore dekhle, hobe e na.<span class="time-stamp">2:29 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Mal ta amk o block kore diyache majha 1 din call korechlo thik subidha hye ni akhon dakhe block kore diyache<span class="time-stamp">2:31 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">🤣🤣<span class="time-stamp">2:31 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Kal tar abar self respect vore vore ache, mne except korte pare na j meye Or sathe kotha bolbe na<span class="time-stamp">2:32 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Haa<span class="time-stamp">2:32 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">🤣<span class="time-stamp">2:32 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Asojjo mal sala pele e kelabo<span class="time-stamp">2:32 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ami icce korle o akhn jail e thakto amr ja police e contact ache<span class="time-stamp">2:33 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">O golpo dito Or bari te onk problm but biswas koro Or dada o Or baba miliye mas e 1lkh er upor income kore.<span class="time-stamp">2:33 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Help ta koro na please🥲 just 2to photos<span class="time-stamp">2:39 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">🤣🤣 ankan o tai bole<span class="time-stamp">2:39 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">O to ar besi income kore naa 3 yr experience tao onk kom pai ami 1 yr a or kache kachi salary pai<span class="time-stamp">2:40 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ai gulo thik na<span class="time-stamp">2:41 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">🙃<span class="time-stamp">2:41 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Fasbe kon din mal ta, ebar e fasto sudhu sangitar jonno beche gelo<span class="time-stamp">2:41 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ha mal ta eto kom salary ki kore pai<span class="time-stamp">2:41 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Please dao na photos, please help koro, r kichu to chaichi na,<br><br>if you want to see that I am ok with it also<span class="time-stamp">2:42 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Please🙏 dao<span class="time-stamp">2:43 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ki<span class="time-stamp">2:44 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Photo kno chaichi bujhte perecho I think.<span class="time-stamp">2:44 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">🙂<span class="time-stamp">2:45 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Haa ai tai chai na bole dicche na tomre kache sangita e chobi ache<span class="time-stamp">2:45 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ar thke besi ar ami kichu bolte pari naa<span class="time-stamp">2:45 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Jeta bujhecho Jodi tumi dekhte o chao seta I am ok with it. Just please 2to photo dao 🥲<span class="time-stamp">2:46 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa<span class="time-stamp">2:46 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Please dao na 🥹<span class="time-stamp">2:47 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Onk option ache ..<span class="time-stamp">2:49 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Amr ai vlo laghe naa<span class="time-stamp">2:49 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Jani onk option ache but amr ogulo valo lage na, tmi vison h and s. That's why. 🥲<span class="time-stamp">2:50 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Please akbar help koro🥲<span class="time-stamp">2:54 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa amon kichu na<span class="time-stamp">2:56 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ar amk niye amon kichu vbo naa<span class="time-stamp">2:56 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Please<span class="time-stamp">2:56 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm but tumi sotti e hot<span class="time-stamp">2:57 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Seta sotti seta sotti<span class="time-stamp">2:57 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Jai hok charo esb drkr chilo photo<br>Actually akhn Jodi ota na kore ghumate jai betha korbe<span class="time-stamp">2:59 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">🥹🥲<span class="time-stamp">3:10 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmr fb lock kora<span class="time-stamp">3:22 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Dp ta hbbi ota e dekhlm<span class="time-stamp">3:22 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">🤭<span class="time-stamp">3:22 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Sangita 9tai asbe direct dekha hobe aj<span class="time-stamp">6:51 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Haa<span class="time-stamp">8:48 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">But dp er photo dekhe hoye geche<span class="time-stamp">8:50 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">🫣<span class="time-stamp">8:50 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Sangita asbe 10tar dike ok camp e charte jabo. Sms koro na r, rate kotha hobe<span class="time-stamp">9:19 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hi<span class="time-stamp">9:54 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ki korcho<span class="time-stamp">10:06 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Kotha bolcho na ki bpr, rag?<span class="time-stamp">10:15 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Bolo<span class="time-stamp">10:15 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa emni<span class="time-stamp">10:15 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ki hoyeche suni<span class="time-stamp">10:16 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Vloi lgchilo aj tmk besh<span class="time-stamp">10:17 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ki hoyeche?<span class="time-stamp">10:45 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Amon kno bolcho<span class="time-stamp">11:20 PM</span></div></div>
+
+        <div class="date-divider">August 10, 2026</div>
+
+        <div class="msg-row left"><div class="bubble">Kno bolbo na?<span class="time-stamp">5:14 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Good morning<span class="time-stamp">8:20 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Kal jokhn call elo tumi r sangita baire gele, ki kotha bollo sangita?<span class="time-stamp">8:22 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Office ar kotha<span class="time-stamp">9:13 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Kno ki hoyeche<span class="time-stamp">9:13 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa sangita kharap laghbe<span class="time-stamp">9:14 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ki kotha bolo<span class="time-stamp">9:14 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Phone a kotha bolchlo<span class="time-stamp">9:14 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ha to ki kotha bolchilo<span class="time-stamp">10:18 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Oi pet batha tai jai ni<span class="time-stamp">10:20 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Osud kinte gache<span class="time-stamp">10:20 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Amr sathe beriyeche Or family er sathe beriyeche bolle kono problem hoto?<span class="time-stamp">10:21 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sata naa or office to o jata vlo bujhbe satai to bolbe<span class="time-stamp">10:26 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm but biswajit ok bar bar call korche<span class="time-stamp">10:46 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Sokal theke 10bar er upore<span class="time-stamp">10:46 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">🙃🙃<span class="time-stamp">11:30 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Sotti<span class="time-stamp">11:34 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tmr sathe akdin dekha korbo<span class="time-stamp">11:54 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Kno 🥲<span class="time-stamp">12:06 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Emni dekha korbo akdin<span class="time-stamp">12:10 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Movie dekhte jabe?<span class="time-stamp">12:17 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Kno jhamala badhacho<span class="time-stamp">12:24 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Bakar 1 ta jhamela hbe<span class="time-stamp">12:24 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Jhamela hobe kno?<span class="time-stamp">12:25 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tumi bole dibe ki?<span class="time-stamp">12:28 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Jata janle problem hbe sei  kj kore ki lav<span class="time-stamp">12:43 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Janbe ki kore ami office tumio office 2-3ghonta k bujhte parbe?<span class="time-stamp">12:44 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ghure, asi amra tarpor kono akdin<span class="time-stamp">12:44 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Sangita ta o jabe amdar shte tahola jabo<span class="time-stamp">1:01 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Kno sangita amra e jai<span class="time-stamp">1:31 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa<span class="time-stamp">1:44 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Ota hye na<span class="time-stamp">1:44 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Kno?<span class="time-stamp">1:44 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Kno mne Sangita TMR gf hye<span class="time-stamp">2:20 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm<span class="time-stamp">2:22 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Haa tahola<span class="time-stamp">2:23 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tumi hole ektu mon khule kotha bolte partam<span class="time-stamp">2:28 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Bolcho to sb ar ki bolbe<span class="time-stamp">2:50 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Bujhlam na<span class="time-stamp">2:51 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Sorry jodi kharap lege thak<span class="time-stamp">2:51 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Bolam aga bolcho to ar ki bolbe<span class="time-stamp">3:57 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Aro bolbo dekha kore<span class="time-stamp">3:57 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Amk bole ki hbe<span class="time-stamp">4:02 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Bolo<span class="time-stamp">4:02 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hobe mon ta iktu halka<span class="time-stamp">4:04 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Rag korle?<span class="time-stamp">4:40 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Tumi sangita k bolo na esb<span class="time-stamp">4:41 PM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa Bolo naa<span class="time-stamp">5:39 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hmmm<span class="time-stamp">5:46 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Hi<span class="time-stamp">11:34 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Dnnr holo?<span class="time-stamp">11:35 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ankan bollo kichu r?<span class="time-stamp">11:35 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Group e to keu kichu bolche na<span class="time-stamp">11:35 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Ki holo seen kore rekhe dicco<span class="time-stamp">11:36 PM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Busy?<span class="time-stamp">11:44 PM</span></div></div>
+
+        <div class="date-divider">August 11, 2026</div>
+
+        <div class="msg-row left"><div class="bubble">Sangita akhn tmr sathe kotha bolche?<span class="time-stamp">12:25 AM</span></div></div>
+        <div class="msg-row left"><div class="bubble">Etar ans dao drkr<span class="time-stamp">12:25 AM</span></div></div>
+        <div class="msg-row right"><div class="bubble">Naa<span class="time-stamp">12:39 AM</span></div></div>
+
+    </div>
+</div>
+
+<script>
+    // Automatically scroll to the bottom on load (like WhatsApp)
+    const chatBody = id = document.getElementById('chatBody');
+    chatBody.scrollTop = chatBody.scrollHeight;
+</script>
+
+</body>
+</html>
